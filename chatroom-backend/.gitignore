@@ -1,2 +1,3 @@
 migrations/versions/*
 **/__pycache__
+**/*.db
