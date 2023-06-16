@@ -1,0 +1,8 @@
+{
+  "include": ".",
+  "pythonVersion": "3.11.4",
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+  "venv": ".venv",
+  "venvPath": ".",
+}

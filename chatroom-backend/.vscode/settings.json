@@ -1,0 +1,27 @@
+{
+  "python.languageServer": "Pylance",
+  "python.autoComplete.extraPaths": ["./", "../", "../src", "src/", "./src"],
+  "python.analysis.extraPaths": [
+    "./",
+    "../",
+    "../src",
+    "src/",
+    "./src"
+  ],
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "python.linting.flake8Args": ["--max-line-length=101"],
+  "bashBeautify.tabSize": 4,
+  "python.analysis.typeCheckingMode": "off",
+  "notebook.output.textLineLimit": 500,
+  "python.analysis.indexing": true,
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "db.models",
+      "depth": 1,
+      "includeAllSymbols": false
+    }
+  ]
+}

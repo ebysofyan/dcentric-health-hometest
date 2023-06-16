@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "chatroom-backend"
+version = "0.1.0"
+description = ""
+authors = ["Eby <eby.sofyan@quokkahr.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.97.0"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+sqlalchemy = "^2.0.16"
+slugify = "^0.0.1"
+alembic = "^1.11.1"
+dependency-injector = "^4.41.0"
+python-dotenv = "^1.0.0"
+python-slugify = "8.0.1"
+cryptography = "^41.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.3.3"
+black = "^23.3.0"
+pytest = "^7.3.2"
+ipython = "^8.14.0"
+ipykernel = "^6.23.2"
+websocket-client = "^1.5.3"
+rel = "^0.4.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
