@@ -1,74 +1,120 @@
 import * as React from "react";
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    Button,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 import { createNewRoom, joinRoom } from "../api/Room";
-import { Redirect, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 export default function Index() {
-    const router = useRouter()
+    const router = useRouter();
     const [newRoom, setNewRoom] = React.useState("");
     const [existingRoom, setExistingRoomName] = React.useState("");
-    const [createRoomLoading, setCreateRoomLoading] = React.useState(false)
-    const [joinRoomLoading, setJoinRoomLoading] = React.useState(false)
+    const [createRoomLoading, setCreateRoomLoading] = React.useState(false);
+    const [joinRoomLoading, setJoinRoomLoading] = React.useState(false);
 
     const resetInput = () => {
-        setNewRoom("")
-        setExistingRoomName("")
-    }
+        setNewRoom("");
+        setExistingRoomName("");
+    };
 
     const handleCreateNewRoomClick = async () => {
-        setCreateRoomLoading(true)
+        setCreateRoomLoading(true);
         try {
             const room = await createNewRoom(newRoom);
-            router.push({ pathname: "room", params: { id: room.data.id } })
-            resetInput()
+            router.push({
+                pathname: "room/[id]",
+                params: {
+                    id: room.data.id,
+                    userId: room.data.user.id,
+                    encryptionKey: room.data.encryption_key,
+                },
+            });
+            resetInput();
         } catch (error) {
             alert(error.message);
         }
-        setCreateRoomLoading(false)
-    }
+        setCreateRoomLoading(false);
+    };
     const handleJoinExistingRoomClick = async () => {
-        setJoinRoomLoading(true)
+        setJoinRoomLoading(true);
         try {
             const room = await joinRoom(existingRoom);
-            router.push({ pathname: "room/[id]", params: { id: room.data.id, userId: room.data.user.id } })
-            resetInput()
+            router.push({
+                pathname: "room/[id]",
+                params: {
+                    id: room.data.id,
+                    userId: room.data.user.id,
+                    encryptionKey: room.data.encryption_key,
+                },
+            });
+            resetInput();
         } catch (error) {
             alert(error.message);
         }
-        setJoinRoomLoading(false)
-    }
+        setJoinRoomLoading(false);
+    };
     return (
         <View style={styles.container}>
+            <Stack.Screen
+                options={{
+                    title: "Home",
+                }}
+            />
             <Text>Create room #{newRoom}</Text>
             <View style={styles.inputWrapper}>
-                <TextInput placeholder="Enter room name" style={styles.input} onChange={(e) => setNewRoom(e.nativeEvent.text)} value={newRoom} />
-                <Pressable style={{ ...styles.button, backgroundColor: "#4682B4" }} onPress={handleCreateNewRoomClick}>
-                    <Text style={styles.textButton}>{createRoomLoading ? "Creating..." : "Create"}</Text>
+                <TextInput
+                    placeholder="Enter room name"
+                    style={styles.input}
+                    onChange={(e) => setNewRoom(e.nativeEvent.text)}
+                    value={newRoom}
+                />
+                <Pressable
+                    style={{ ...styles.button, backgroundColor: "#4682B4" }}
+                    onPress={handleCreateNewRoomClick}
+                >
+                    <Text style={styles.textButton}>
+                        {createRoomLoading ? "Creating..." : "Create"}
+                    </Text>
                 </Pressable>
             </View>
             <Text>Or join room #{existingRoom}</Text>
             <View style={styles.inputWrapper}>
-                <TextInput placeholder="Enter existing room name" style={styles.input} onChange={(e) => setExistingRoomName(e.nativeEvent.text)} value={existingRoom} />
-                <Pressable style={{ ...styles.button, backgroundColor: "#40B5AD" }} onPress={handleJoinExistingRoomClick}>
-                    <Text style={styles.textButton}>{joinRoomLoading ? "Joining..." : "Join"}</Text>
+                <TextInput
+                    placeholder="Enter existing room name"
+                    style={styles.input}
+                    onChange={(e) => setExistingRoomName(e.nativeEvent.text)}
+                    value={existingRoom}
+                />
+                <Pressable
+                    style={{ ...styles.button, backgroundColor: "#40B5AD" }}
+                    onPress={handleJoinExistingRoomClick}
+                >
+                    <Text style={styles.textButton}>
+                        {joinRoomLoading ? "Joining..." : "Join"}
+                    </Text>
                 </Pressable>
             </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         gap: 12,
-        flexDirection: 'column',
-        backgroundColor: '#fff',
-        padding: 32
+        flexDirection: "column",
+        backgroundColor: "#fff",
+        padding: 32,
     },
     inputWrapper: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 16
+        gap: 16,
     },
     input: {
         flex: 1,
@@ -76,15 +122,15 @@ const styles = StyleSheet.create({
         height: 55,
         fontSize: 16,
         borderWidth: 1,
-        borderColor: 'grey',
+        borderColor: "grey",
         padding: 12,
-        borderRadius: 4
+        borderRadius: 4,
     },
     button: {
         height: 55,
         width: 100,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
         paddingVertical: 12,
         paddingHorizontal: 8,
         borderRadius: 4,
@@ -92,7 +138,7 @@ const styles = StyleSheet.create({
     },
     textButton: {
         fontSize: 14,
-        fontWeight: '600',
-        color: 'white',
+        fontWeight: "600",
+        color: "white",
     },
-})
+});

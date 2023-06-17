@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useSearchParams } from "expo-router";
+import { Stack, useGlobalSearchParams } from "expo-router";
 import {
     Text,
     View,
@@ -15,12 +15,15 @@ import { ChatIface } from "../../ifaces/Chat";
 import { TextInput } from "react-native-gesture-handler";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WS_URL } from "../../constants";
+import { decrypt, encrypt } from "../../utils/chiper-utils";
 
 export default function ChatRoom() {
-    const { id, userId } = useSearchParams();
+    const { id, userId, encryptionKey } = useGlobalSearchParams();
     const flatListRef = React.useRef<FlatList>();
     const [chats, setChats] = React.useState([]);
     const [message, setMessage] = React.useState("");
+
+    // const [socketUrl, setSocketUrl] = React.useState();
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
         WS_URL.concat(`/ws/${id}`),
         {
@@ -49,6 +52,13 @@ export default function ChatRoom() {
         };
         fetchChat();
     }, [id]);
+    const getSafeMessage = (chat: ChatIface): string => {
+        try {
+            return decrypt({ ciphertext: chat.text, encryptionKey: encryptionKey })
+        } catch (error) {
+            return "Unsupported message"
+        }
+    }
     const ChatItemView = (chat: ChatIface, index: number) => {
         const isSender = userId.toString() === chat.sender.id.toString();
         return (
@@ -60,9 +70,9 @@ export default function ChatRoom() {
                     backgroundColor: isSender ? "#6F8FAF" : "#088F8F",
                 }}
             >
-                <Text style={{color: "white", fontWeight: "600", fontSize: 14}}>{isSender ? "You" : chat.sender.name}</Text>
-                <Text style={styles.chatItemText}>{chat.text}</Text>
-                <Text style={{ fontSize: 10, alignSelf: "flex-end", color: "white" }}>
+                <Text style={styles.chatItemSender}>{isSender ? "You" : chat.sender.name}</Text>
+                <Text style={styles.chatItemContent}>{getSafeMessage(chat)}</Text>
+                <Text style={styles.chatItemTime}>
                     {chat.created_at}
                 </Text>
             </View>
@@ -71,8 +81,9 @@ export default function ChatRoom() {
 
     const handleSendPress = () => {
         if (Boolean(message)) {
+            console.log(id)
             sendJsonMessage({
-                text: message,
+                text: encrypt({ plaintext: message, encryptionKey: encryptionKey }),
                 sender_id: userId.toString(),
             });
             setMessage("");
@@ -85,6 +96,11 @@ export default function ChatRoom() {
     }
     return (
         <SafeAreaView style={styles.container}>
+            <Stack.Screen
+                options={{
+                    title: "Chat Room",
+                }}
+            />
             <Text style={{ textAlign: "center", padding: 4 }}>
                 Connction status : {connectionStatus}
             </Text>
@@ -93,7 +109,7 @@ export default function ChatRoom() {
                 style={styles.scrollview}
                 data={chats}
                 renderItem={({ item, index }) => ChatItemView(item, index)}
-                onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+                onContentSizeChange={() => chats.length > 0 && flatListRef.current.scrollToEnd({ animated: true })}
             />
             <View style={styles.chatInputContainer}>
                 <TextInput
@@ -101,7 +117,6 @@ export default function ChatRoom() {
                     placeholder="Type something..."
                     onChange={(e) => setMessage(e.nativeEvent.text)}
                     value={message}
-                    onKeyPress={handleKeyPress}
                     onSubmitEditing={handleSendPress}
                 />
                 <TouchableOpacity style={styles.buttonSend} onPress={handleSendPress}>
@@ -135,9 +150,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderColor: "transparent",
         fontWeight: "600",
-        marginBottom: 8
+        marginBottom: 8,
+        gap: 4
     },
-    chatItemText: { color: "white", fontWeight: "600" },
+    chatItemSender: { color: "white", fontWeight: "200", fontSize: 14, marginBottom: 4 },
+    chatItemContent: { color: "white", fontWeight: "600" },
+    chatItemTime: { fontSize: 10, alignSelf: "flex-end", color: "white" },
     chatInputContainer: {
         flexDirection: "row",
         flexShrink: 0,

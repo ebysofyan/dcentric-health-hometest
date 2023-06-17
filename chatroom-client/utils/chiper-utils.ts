@@ -1,7 +1,7 @@
+import 'react-native-get-random-values';
 import CryptoJS from "crypto-js";
 
-var ciphertext = CryptoJS.AES.encrypt('Helllo World', '3d4b7b09924e406ba946cab489b08bd2').toString();
-ciphertext
-var bytes  = CryptoJS.AES.decrypt(ciphertext, '3d4b7b09924e406ba946cab489b08bd2');
-var originalText = bytes.toString(CryptoJS.enc.Utf8);
-originalText
+export const encrypt = ({ plaintext, encryptionKey }) =>
+  CryptoJS.AES.encrypt(plaintext, encryptionKey).toString();
+export const decrypt = ({ ciphertext, encryptionKey }) =>
+  CryptoJS.AES.decrypt(ciphertext, encryptionKey).toString(CryptoJS.enc.Utf8)
