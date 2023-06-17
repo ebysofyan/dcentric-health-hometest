@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import { BASE_URL } from "../constants";
-import { RoomIface } from "../ifaces/RoomIface";
+import { RoomIface } from "../ifaces/Room";
 export const createNewRoom = (
   name: string
 ): Promise<AxiosResponse<RoomIface, any>> => {

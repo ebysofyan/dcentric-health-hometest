@@ -19,7 +19,7 @@ export default function Index() {
         setCreateRoomLoading(true)
         try {
             const room = await createNewRoom(newRoom);
-            router.push(`/room/${room.data.id}`)
+            router.push({ pathname: "room", params: { id: room.data.id } })
             resetInput()
         } catch (error) {
             alert(error.message);
@@ -30,7 +30,7 @@ export default function Index() {
         setJoinRoomLoading(true)
         try {
             const room = await joinRoom(existingRoom);
-            router.push(`/room/${room.data.id}`)
+            router.push({ pathname: "room/[id]", params: { id: room.data.id, userId: room.data.user.id } })
             resetInput()
         } catch (error) {
             alert(error.message);
