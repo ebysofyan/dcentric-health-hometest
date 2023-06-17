@@ -1,8 +1,8 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import { BASE_URL } from "../constants";
-import { RoomIface } from "../ifaces/Room";
-import { ChatIface } from "../ifaces/Chat";
+import { RoomIface } from "../ifaces/room.iface";
+import { ChatIface } from "../ifaces/chat.iface";
 
 export const getAllChatByRoomId = (
   roomId: string | string[]

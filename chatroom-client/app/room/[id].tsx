@@ -10,12 +10,12 @@ import {
     TextInputKeyPressEventData,
     NativeSyntheticEvent,
 } from "react-native";
-import { getAllChatByRoomId } from "../../api/Chat";
-import { ChatIface } from "../../ifaces/Chat";
+import { getAllChatByRoomId } from "../../api/chat.api";
+import { ChatIface } from "../../ifaces/chat.iface";
 import { TextInput } from "react-native-gesture-handler";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WS_URL } from "../../constants";
-import { decrypt, encrypt } from "../../utils/chiper-utils";
+import { decrypt, encrypt } from "../../utils/cipher.utils";
 
 export default function ChatRoom() {
     const { id, userId, encryptionKey } = useGlobalSearchParams();

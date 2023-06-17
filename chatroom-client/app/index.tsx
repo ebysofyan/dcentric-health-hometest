@@ -7,7 +7,7 @@ import {
     TextInput,
     View,
 } from "react-native";
-import { createNewRoom, joinRoom } from "../api/Room";
+import { createNewRoom, joinRoom } from "../api/room.api";
 import { Stack, useRouter } from "expo-router";
 
 export default function Index() {
