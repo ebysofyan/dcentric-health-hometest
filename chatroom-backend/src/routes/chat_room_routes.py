@@ -2,7 +2,8 @@ import uuid
 
 from dependency_injector.wiring import Provide, inject
 from deps_container import Container
-from entity.chat import CreateRoomEntity, JoinRoomEntity, RoomEntity
+from entity.chat import (CreateRoomEntity, DetailRoomEntity, JoinRoomEntity,
+                         RoomEntity)
 from entity.user import CreateUserEntity
 from fastapi import APIRouter, Depends, HTTPException, status
 from models.chat import Room
@@ -18,11 +19,10 @@ router = APIRouter(prefix="/rooms")
 async def get_rooms(
     chat_room_service: ChatRoomService = Depends(Provide[Container.chat_room_service]),
 ) -> list[Room]:
-    print(chat_room_service.get_all())
     return chat_room_service.get_all()
 
 
-@router.post("", response_model=RoomEntity)
+@router.post("", response_model=DetailRoomEntity)
 @inject
 async def create_new_room(
     payload: CreateRoomEntity,
@@ -45,7 +45,7 @@ async def create_new_room(
         raise e
 
 
-@router.post("/join", response_model=RoomEntity)
+@router.post("/join", response_model=DetailRoomEntity)
 @inject
 async def join_room(
     payload: JoinRoomEntity,

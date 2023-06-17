@@ -9,10 +9,16 @@ class RoomEntity(BaseModel):
     id: int
     name: str
     encryption_key: str
+
+    class Config:
+        orm_mode = True
+
+
+class DetailRoomEntity(RoomEntity):
     user: UserEntity | None
 
-    # class Config:
-    #     orm_mode = True
+    class Config:
+        orm_mode = False
 
 
 class CreateRoomEntity(BaseModel):
