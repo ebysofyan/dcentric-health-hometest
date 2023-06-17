@@ -15,4 +15,5 @@ class UserService:
             return self._user_repository.create(payload=payload, commit=commit)
         except Exception as e:
             self._user_repository._db_session.rollback()
+            self._user_repository._db_session.close()
             raise e
