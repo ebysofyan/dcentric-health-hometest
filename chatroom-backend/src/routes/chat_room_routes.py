@@ -1,11 +1,10 @@
 import uuid
 
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, HTTPException, status
-
 from deps_container import Container
 from entity.chat import CreateRoomEntity, JoinRoomEntity, RoomEntity
 from entity.user import CreateUserEntity
+from fastapi import APIRouter, Depends, HTTPException, status
 from models.chat import Room
 from models.user import User
 from services.chat_room_service import ChatRoomService
@@ -32,7 +31,7 @@ async def create_new_room(
 ) -> Room:
     try:
         hex: str = uuid.uuid4().hex
-        user: User = user_service.create(payload=CreateUserEntity(name=f"User {hex}"))
+        user: User = user_service.create(payload=CreateUserEntity(name=f"User#{hex[:8]}"))
         room: Room = chat_room_service.create(
             payload=CreateRoomEntity(name=payload.name, creator_id=user.id), commit=True
         )
@@ -59,7 +58,7 @@ async def join_room(
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Room not found")
 
         hex: str = uuid.uuid4().hex
-        user: User = user_service.create(payload=CreateUserEntity(name=f"User {hex}"))
+        user: User = user_service.create(payload=CreateUserEntity(name=f"User#{hex[:8]}"))
         return {
             "id": room.id,
             "name": room.name,

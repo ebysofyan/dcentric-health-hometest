@@ -1,11 +1,10 @@
 from typing import Any
 
-from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
-
 from core import logger
+from dependency_injector.wiring import Provide, inject
 from deps_container import Container
 from entity.chat import CreateChatEntity
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from models.chat import Chat
 from services.chat_service import ChatService
 from ws_connection_manager import ConnectionManager
@@ -34,7 +33,7 @@ async def websocket_endpoint(
                 "text": chat.text,
                 "room_id": chat.room_id,
                 "sender": {"id": chat.sender_id, "name": chat.sender.name},
-                "created_at": chat.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                "created_at": chat.created_at.strftime("%d %b %H:%M %p"),
             }
             await connection_manager.broadcast(room_id=room_id, data=response_data)
     except WebSocketDisconnect:

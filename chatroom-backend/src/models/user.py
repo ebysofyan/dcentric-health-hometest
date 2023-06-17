@@ -1,7 +1,6 @@
+from models.base import BaseIntPrimaryKey
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
-
-from models.base import BaseIntPrimaryKey
 
 
 class User(BaseIntPrimaryKey):

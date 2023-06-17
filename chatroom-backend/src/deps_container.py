@@ -1,6 +1,5 @@
-from dependency_injector import containers, providers
-
 from database import Database
+from dependency_injector import containers, providers
 from repositories.chat_repository import ChatRepository
 from repositories.chat_room_repository import ChatRoomRepository
 from repositories.user_repository import UserRepository

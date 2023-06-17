@@ -1,4 +1,5 @@
 from typing import Any
+
 from fastapi import WebSocket
 
 
@@ -11,9 +12,7 @@ class ConnectionManager:
         try:
             self.active_connections_map[room_id].append(websocket)
         except KeyError:
-            self.active_connections_map = {
-                room_id: [websocket]
-            }
+            self.active_connections_map = {room_id: [websocket]}
 
     def disconnect(self, room_id: int, websocket: WebSocket) -> None:
         try:

@@ -1,10 +1,9 @@
 from functools import cached_property
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-
 import envs
 from internal.types import ScopedSession
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 engine = create_engine(envs.DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
 

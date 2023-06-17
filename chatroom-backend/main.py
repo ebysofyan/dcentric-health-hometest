@@ -8,9 +8,8 @@ from dotenv import load_dotenv
 current: str = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(current, "src"))
 
-from fastapi import FastAPI
-
 from deps_container import Container
+from fastapi import FastAPI
 from routes.chat_room_routes import router as chat_room_router
 from routes.chat_routes import router as chat_router
 from routes.user_routes import router as user_router

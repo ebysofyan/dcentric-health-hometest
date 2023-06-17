@@ -1,8 +1,8 @@
 import datetime
-
-from pydantic import BaseModel
+from typing import Any, Self
 
 from entity.user import UserEntity
+from pydantic import BaseModel, root_validator
 
 
 class RoomEntity(BaseModel):
@@ -29,6 +29,13 @@ class ChatEntity(BaseModel):
     room_id: int
     sender: UserEntity
     created_at: datetime.datetime
+
+    @root_validator
+    def format_created_at(cls: Self, values: dict[str, Any]) -> str:
+        created_at = values.get("created_at")
+        if created_at is not None:
+            values["created_at"] = created_at.strftime("%d %b %H:%M %p")
+        return values
 
     class Config:
         orm_mode = True

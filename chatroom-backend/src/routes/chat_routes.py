@@ -1,8 +1,7 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends
-
 from deps_container import Container
 from entity.chat import ChatEntity
+from fastapi import APIRouter, Depends
 from models.chat import Chat
 from services.chat_service import ChatService
 
