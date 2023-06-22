@@ -1,8 +1,9 @@
 import datetime
 from typing import Any, Self
 
-from entity.user import UserEntity
 from pydantic import BaseModel, root_validator
+
+from entity.user import UserEntity
 
 
 class RoomEntity(BaseModel):

@@ -1,9 +1,10 @@
 import uuid
 
+from slugify import slugify
+
 from entity.chat import CreateRoomEntity
 from internal.types import ScopedSession
 from models.chat import Room
-from slugify import slugify
 
 
 class ChatRoomRepository:

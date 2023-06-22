@@ -8,16 +8,16 @@ from dotenv import load_dotenv
 current: str = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(current, "src"))
 
-from deps_container import Container
 from fastapi import FastAPI
-from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
+
+from deps_container import Container
 from routes.chat_room_routes import router as chat_room_router
 from routes.chat_routes import router as chat_router
 from routes.user_routes import router as user_router
 from routes.ws_routes import router as ws_router
 
-origins = [
+origins: list[str] = [
     "http://localhost:19000",
 ]
 
@@ -26,8 +26,8 @@ def create_app() -> FastAPI:
     load_dotenv()
     container = Container()
 
-    db = container.db()
-    db.create_database()
+    # db = container.db()
+    # db.create_database()
 
     app = FastAPI()
     app.add_middleware(
@@ -46,3 +46,9 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+if __name__ == "__main__":
+    import uvicorn
+
+    app.container.db().create_database()
+    uvicorn.run(app=app, host="0.0.0.0", port=8008, log_level="debug", reload=True)

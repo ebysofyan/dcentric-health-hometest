@@ -1,5 +1,7 @@
-from database import Database
 from dependency_injector import containers, providers
+
+from database import Database
+from envs import DATABASE_URL
 from repositories.chat_repository import ChatRepository
 from repositories.chat_room_repository import ChatRoomRepository
 from repositories.user_repository import UserRepository
@@ -24,7 +26,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     config = providers.Configuration()
-    db = providers.Singleton(Database)
+    db = providers.Singleton(Database, database_url=DATABASE_URL)
     connection_manager = providers.Singleton(ConnectionManager)
 
     user_repository = providers.Factory(

@@ -1,27 +1,39 @@
 from functools import cached_property
+from typing import Any
 
-import envs
-from internal.types import ScopedSession
-from sqlalchemy import create_engine
+from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-engine = create_engine(envs.DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
+from internal.types import ScopedSession
+
+# engine = create_engine(envs.DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
 
 
 class Database:
-    def __init__(self) -> None:
+    def __init__(
+        self, database_url: str, connect_args: dict[str, Any] = {"check_same_thread": False}
+    ) -> None:
+        self._database_url: str = database_url
+        self._engine: Engine = create_engine(
+            self._database_url, echo=True, connect_args=connect_args
+        )
         self._session_factory = scoped_session(
             session_factory=sessionmaker(
                 autocommit=False,
                 autoflush=False,
-                bind=engine,
+                bind=self._engine,
             ),
         )
 
     def create_database(self) -> None:
         from models.base import Base
 
-        Base.metadata.create_all(engine)
+        Base.metadata.create_all(self._engine)
+
+    def drop_database(self) -> None:
+        from models.base import Base
+
+        Base.metadata.drop_all(self._engine)
 
     @cached_property
     def session(self) -> ScopedSession:

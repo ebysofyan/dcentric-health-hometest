@@ -1,10 +1,11 @@
 from typing import Any
 
-from core import logger
 from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+
+from core import logger
 from deps_container import Container
 from entity.chat import CreateChatEntity
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from models.chat import Chat
 from services.chat_service import ChatService
 from ws_connection_manager import ConnectionManager

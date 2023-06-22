@@ -8,10 +8,11 @@ from dotenv import load_dotenv
 current: str = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))  # NOQA;
 sys.path.insert(1, os.path.join(current, "src"))  # NOQA;
 
-from database import engine  # NOQA;
+from database import Database  # NOQA;
 from models.base import Base  # NOQA;
 
 load_dotenv()
+database_url = os.getenv("DATABASE_URL")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -47,7 +48,7 @@ def run_migrations_offline() -> None:
 
     """
     context.configure(
-        url=os.getenv("DATABASE_URL"),
+        url=database_url,
         target_metadata=target_metadata,
         render_as_batch=True,
         literal_binds=True,
@@ -71,7 +72,7 @@ def run_migrations_online() -> None:
     #     poolclass=pool.NullPool,
     # )
 
-    connectable = engine
+    connectable = Database(database_url=database_url)._engine
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
 
